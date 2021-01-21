@@ -5,7 +5,20 @@ function initToggleMenu() {
   $menuIcon.addEventListener("click", function() {
     $menu.classList.toggle("menu-hidden");
     $page.classList.toggle("page-without-menu");
+    var menu_state = window.sessionStorage.getItem("menu");
+    var menu_state = menu_state === "hidden" ? "visible" : "hidden";
+    window.sessionStorage.setItem("menu", menu_state);
   });
+}
+
+function keepMenuTheSame() {
+  var menu_state = window.sessionStorage.getItem("menu");
+  if (menu_state === "hidden") {
+    var menu = document.querySelector(".menu");
+    var page = document.querySelector(".page");
+    menu.classList.toggle("menu-hidden");
+    page.classList.toggle("page-without-menu");
+  }
 }
 
 function debounce(func, wait) {
@@ -215,9 +228,12 @@ if (document.readyState === "complete" ||
     (document.readyState !== "loading" && !document.documentElement.doScroll)
 ) {
   initToggleMenu();
+  keepMenuTheSame();
+
 } else {
   document.addEventListener("DOMContentLoaded", function () {
     initToggleMenu();
     initSearch();
+    keepMenuTheSame();
   });
 }
